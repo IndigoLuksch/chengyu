@@ -831,8 +831,34 @@ async function search() {
           </div>
           <span class="score-label">Relevance ${pct}%</span>
         </div>
+        <button class="daily-share-btn share-result-btn"
+                data-chinese="${idiom.c}"
+                data-pinyin="${idiom.p}"
+                data-literal="${(idiom.l || '').replace(/"/g, '&quot;')}"
+                data-meaning="${(idiom.m || '').replace(/"/g, '&quot;')}">Share</button>
       `;
       resultsEl.appendChild(card);
+    });
+
+    // Attach share handlers to result cards
+    document.querySelectorAll(".share-result-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const d = btn.dataset;
+        const text = d.literal
+          ? `${d.chinese} (${d.pinyin})\n"${d.literal}"\n\n${d.meaning}\n\n— from www.chengyu.app`
+          : `${d.chinese} (${d.pinyin})\n\n${d.meaning}\n\n— from www.chengyu.app`;
+        await navigator.clipboard.writeText(text);
+        const bubble = document.createElement("div");
+        bubble.textContent = "Copied!";
+        bubble.style.cssText = `
+          position:fixed; bottom:32px; left:50%; transform:translateX(-50%);
+          background:#8b1a1a; color:#fff; padding:8px 18px; border-radius:99px;
+          font-size:.85rem; font-family:inherit; pointer-events:none;
+          opacity:1; transition:opacity .4s; z-index:999;
+        `;
+        document.body.appendChild(bubble);
+        setTimeout(() => { bubble.style.opacity = "0"; setTimeout(() => bubble.remove(), 400); }, 1800);
+      });
     });
 
     statusEl.textContent = "Showing top 3 matches";
@@ -932,7 +958,7 @@ document.getElementById("daily-share").addEventListener("click", async () => {
   const idiom = IDIOMS.filter(d => d.m)[
     ((Math.floor(Date.now() / 86400000) * 2654435761) >>> 0) % IDIOMS.filter(d => d.m).length
   ];
-  const text = `成语 of the day: ${idiom.c} (${idiom.p})\n"${idiom.l}"\n\n${idiom.m}\n\n— from chengyu.app`;
+  const text = `成语 of the day: ${idiom.c} (${idiom.p})\n"${idiom.l}"\n\n${idiom.m}\n\n— from www.chengyu.app`;
   const btn = document.getElementById("daily-share");
   await navigator.clipboard.writeText(text);
 
