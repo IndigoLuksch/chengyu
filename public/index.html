@@ -281,7 +281,7 @@ textarea::placeholder { color: #bbb; }
 }
 .score-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--red), var(--red-lt));
+  background: var(--red);
   border-radius: 99px;
 }
 .score-label { font-size: .76rem; color: #bbb; white-space: nowrap; }
@@ -824,7 +824,7 @@ async function search() {
 
     top.forEach((idx, rank) => {
       const idiom = IDIOMS[idx];
-      const pct   = Math.round(Math.max(0, Math.min(1, (scores[idx] - 0.7) / (0.95 - 0.7))) * 100);
+      const pct   = Math.round(Math.max(0, Math.min(1, (scores[idx] - 0.7) / (0.83 - 0.7))) * 100);
 
       const card = document.createElement("div");
       card.className = "result-card";
