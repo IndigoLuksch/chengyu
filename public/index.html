@@ -798,8 +798,14 @@ async function search() {
   resultsEl.innerHTML  = "";
 
   try {
+    // Expand short queries to give the model more semantic context
+    const words        = query.trim().split(/\s+/);
+    const expandedQuery = words.length < 3
+      ? `a person who is ${query} or shows ${query}`
+      : query;
+
     // BGE requires "query: " prefix at search time
-    const out      = await extractor("query: " + query, { pooling: "mean", normalize: true });
+    const out      = await extractor("query: " + expandedQuery, { pooling: "mean", normalize: true });
     const queryVec = new Float32Array(out.data);
     console.log("[search] queryVec length:", queryVec.length, "DIM:", DIM, "sample:", queryVec.slice(0, 3));
 
