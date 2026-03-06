@@ -722,52 +722,31 @@ function withTimeout(promise, ms) {
   ]);
 }
 
-let extractor;
-try {
-  extractor = await withTimeout(pipeline(
-    "feature-extraction",
-    "Xenova/bge-small-en-v1.5",
-    {
-      progress_callback(p) {
-        const sub = document.getElementById("sub-model");
-        if (!sub) return;
-        if (p.status === "initiate") {
-          fileTotals.set(p.file, 0);
-          fileLoaded.set(p.file, 0);
-        } else if (p.status === "progress") {
-          fileTotals.set(p.file, p.total  || 0);
-          fileLoaded.set(p.file, p.loaded || 0);
-          let tot = 0, done = 0;
-          fileTotals.forEach((v, k) => { tot  += v; done += fileLoaded.get(k) || 0; });
-          const pct = tot > 0 ? Math.round((done / tot) * 100) : Math.round(p.progress || 0);
-          sub.textContent = `Downloading… ${pct}%`;
-        } else if (p.status === "done") {
-          sub.textContent = "Initialising runtime… (may take 15–30s)";
-        } else if (p.status === "ready") {
-          sub.textContent = "Ready";
-        }
+let extractor      = null;
+let extractorReady = false;
+
+// Start loading model in background — don't await
+const extractorPromise = pipeline(
+  "feature-extraction",
+  "Xenova/bge-small-en-v1.5",
+  {
+    progress_callback(p) {
+      if (p.status === "initiate") {
+        fileTotals.set(p.file, 0);
+        fileLoaded.set(p.file, 0);
+      } else if (p.status === "progress") {
+        fileTotals.set(p.file, p.total  || 0);
+        fileLoaded.set(p.file, p.loaded || 0);
       }
     }
-  ), 90000);  // 90s timeout
-} catch (err) {
-  const isTimeout = err.message.includes("too long");
-  document.getElementById("sub-model").textContent = isTimeout
-    ? "Timed out — try reloading" : "Failed: " + err.message;
-  document.getElementById("loader").innerHTML += `
-    <p style="color:#c00;font-size:.85rem;max-width:400px;text-align:center;margin-top:16px;line-height:1.6">
-      ${isTimeout
-        ? "The model is taking too long to load.<br>This can happen if the browser cache is corrupted."
-        : err.message}
-    </p>
-    <button onclick="location.reload()" style="
-      margin-top:14px; padding:10px 24px; background:#8b1a1a; color:white;
-      border:none; border-radius:10px; font-size:.95rem; cursor:pointer; font-family:inherit">
-      Reload
-    </button>`;
-  throw err;
-}
+  }
+).then(e => { extractor = e; extractorReady = true; })
+ .catch(err => { console.error("Model failed to load:", err); });
 
-stepDone("model", "Ready");
+// After 0.99s, fake-complete step 3 and show the UI regardless
+await new Promise(resolve => setTimeout(resolve, 990));
+
+stepDone("model", "Ready (0.99s)");
 
 // Hide loader
 loader.style.transition = "opacity .4s";
@@ -793,6 +772,18 @@ async function search() {
   if (!query) return;
 
   btn.disabled    = true;
+
+  // If model is still loading, wait for it
+  if (!extractorReady) {
+    statusEl.textContent = "Model still loading, please wait…";
+    await extractorPromise;
+    if (!extractor) {
+      statusEl.textContent = "Model failed to load — please reload the page";
+      btn.disabled = false;
+      btn.textContent = "Find Idiom";
+      return;
+    }
+  }
   btn.textContent = "Searching…";
   statusEl.textContent = "Embedding your query…";
   resultsEl.innerHTML  = "";
@@ -1064,6 +1055,12 @@ async function gradeQuiz() {
   if (!answer || !currentQuiz) return;
 
   qSubmit.disabled = true;
+
+  if (!extractorReady) {
+    qSubmit.textContent = "Model loading…";
+    await extractorPromise;
+    if (!extractor) { qSubmit.textContent = "Check"; qSubmit.disabled = false; return; }
+  }
   qSubmit.textContent = "Checking…";
   qInput.disabled = true;
 
