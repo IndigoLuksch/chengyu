@@ -379,6 +379,7 @@ textarea::placeholder { color: #bbb; }
   transition: border-color .2s, color .2s;
 }
 .daily-share-btn:hover { border-color: var(--red); color: var(--red); }
+.meta .daily-share-btn { margin-top: 0; margin-left: auto; }
 
 /* ── Quiz ── */
 .quiz-card {
@@ -575,7 +576,7 @@ textarea::placeholder { color: #bbb; }
 <div id="search-section">
   <div class="search-card">
     <textarea id="situation"
-      placeholder="e.g. 'today is a great day'"></textarea>
+      placeholder="成语 (chengyu) are traditional Chinese idiomatic expressions. Derived from ancient literature, historical events, or philosophical texts, they function as condensed metaphors or moral lessons."></textarea>
     <div class="btn-row">
       <button id="search-btn" disabled>Loading…</button>
       <span class="hint" id="hint" style="display:none">Enter to search</span>
@@ -830,12 +831,12 @@ async function search() {
             <div class="score-bar" style="width:${pct}%"></div>
           </div>
           <span class="score-label">Relevance ${pct}%</span>
+          <button class="daily-share-btn share-result-btn"
+                  data-chinese="${idiom.c}"
+                  data-pinyin="${idiom.p}"
+                  data-literal="${(idiom.l || '').replace(/"/g, '&quot;')}"
+                  data-meaning="${(idiom.m || '').replace(/"/g, '&quot;')}">Share</button>
         </div>
-        <button class="daily-share-btn share-result-btn"
-                data-chinese="${idiom.c}"
-                data-pinyin="${idiom.p}"
-                data-literal="${(idiom.l || '').replace(/"/g, '&quot;')}"
-                data-meaning="${(idiom.m || '').replace(/"/g, '&quot;')}">Share</button>
       `;
       resultsEl.appendChild(card);
     });
