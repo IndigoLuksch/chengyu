@@ -824,7 +824,11 @@ async function search() {
 
     top.forEach((idx, rank) => {
       const idiom = IDIOMS[idx];
-      const pct   = Math.round(Math.max(0, Math.min(1, (scores[idx] - 0.7) / (0.83 - 0.7))) * 100);
+      const raw = scores[idx];
+      const pct = raw <= 0.7  ? 0
+                : raw >= 0.83 ? 100
+                : raw <  0.77 ? Math.round(((raw - 0.7)  / (0.77 - 0.7))  * 70)
+                :               Math.round(70 + ((raw - 0.77) / (0.83 - 0.77)) * 30);
 
       const card = document.createElement("div");
       card.className = "result-card";
