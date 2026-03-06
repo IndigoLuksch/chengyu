@@ -309,6 +309,7 @@ textarea::placeholder { color: #bbb; }
   width: var(--slider-width, 0px);
   z-index: 0;
 }
+.mode-toggle.no-transition::before { transition: none; }
 
 .mode-btn {
   padding: 8px 24px;
@@ -936,8 +937,9 @@ function updateSlider(btn) {
 }
 
 // Initialise slider position on the default active button (no animation)
-modeToggle.style.setProperty("transition", "none");
+modeToggle.classList.add("no-transition");
 updateSlider(modeToggle.querySelector(".mode-btn.active"));
+requestAnimationFrame(() => requestAnimationFrame(() => modeToggle.classList.remove("no-transition")));
 
 modeToggle.addEventListener("click", e => {
   const btn = e.target.closest(".mode-btn");
