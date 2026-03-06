@@ -743,10 +743,22 @@ const extractorPromise = pipeline(
 ).then(e => { extractor = e; extractorReady = true; })
  .catch(err => { console.error("Model failed to load:", err); });
 
-// After 0.99s, fake-complete step 3 and show the UI regardless
-await new Promise(resolve => setTimeout(resolve, 990));
+// Animate a fake 0→100% progress over 0.99s, then show UI
+const sub      = document.getElementById("sub-model");
+const FAKE_MS  = 990;
+const INTERVAL = 30;
+let   fakeT    = 0;
+await new Promise(resolve => {
+  const tick = setInterval(() => {
+    fakeT += INTERVAL;
+    // Ease-out curve: fast at start, slows near 100%
+    const pct = Math.round(100 * (1 - Math.pow(1 - Math.min(fakeT / FAKE_MS, 1), 2)));
+    sub.textContent = `Downloading… ${pct}%`;
+    if (fakeT >= FAKE_MS) { clearInterval(tick); resolve(); }
+  }, INTERVAL);
+});
 
-stepDone("model", "Ready (0.99s)");
+stepDone("model", "Ready");
 
 // Hide loader
 loader.style.transition = "opacity .4s";
