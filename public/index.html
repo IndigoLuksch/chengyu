@@ -294,6 +294,20 @@ textarea::placeholder { color: #bbb; }
   padding: 3px;
   margin-bottom: 28px;
   width: fit-content;
+  position: relative;
+}
+
+.mode-toggle::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 99px;
+  background: var(--red);
+  transition: left .25s cubic-bezier(.4,0,.2,1), width .25s cubic-bezier(.4,0,.2,1);
+  left: var(--slider-left, 3px);
+  width: var(--slider-width, 0px);
+  z-index: 0;
 }
 
 .mode-btn {
@@ -305,12 +319,13 @@ textarea::placeholder { color: #bbb; }
   font-weight: 500;
   color: var(--muted);
   cursor: pointer;
-  transition: all .2s;
   font-family: inherit;
+  position: relative;
+  z-index: 1;
+  transition: color .25s;
 }
 
 .mode-btn.active {
-  background: var(--red);
   color: white;
 }
 
@@ -913,11 +928,23 @@ const dailySection  = document.getElementById("daily-section");
 
 modeToggle.style.display = "";  // show after load
 
+function updateSlider(btn) {
+  const toggleRect = modeToggle.getBoundingClientRect();
+  const btnRect    = btn.getBoundingClientRect();
+  modeToggle.style.setProperty("--slider-left",  (btnRect.left  - toggleRect.left)  + "px");
+  modeToggle.style.setProperty("--slider-width", btnRect.width + "px");
+}
+
+// Initialise slider position on the default active button (no animation)
+modeToggle.style.setProperty("transition", "none");
+updateSlider(modeToggle.querySelector(".mode-btn.active"));
+
 modeToggle.addEventListener("click", e => {
   const btn = e.target.closest(".mode-btn");
   if (!btn) return;
   modeToggle.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
+  updateSlider(btn);
 
   const mode = btn.dataset.mode;
   searchSection.classList.toggle("section-hidden", mode !== "search");
