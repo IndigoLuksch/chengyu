@@ -12,9 +12,6 @@
 
 :root {
   --cjk-serif: 'Songti SC','STSong','Noto Serif SC','Noto Serif CJK SC','Source Han Serif SC',SimSun,serif;
-}
-
-:root {
   --red:    #8b1a1a;
   --red-lt: #c97070;
   --bg:     #faf7f4;
@@ -225,13 +222,12 @@ textarea::placeholder { color: #bbb; }
   margin-bottom: 4px;
 }
 
-.chinese {
-  font-size: 2.2rem;
+.chinese, .daily-chinese, .quiz-chinese, header h1 span {
   color: var(--red);
   font-weight: 700;
-  letter-spacing: .06em;
   font-family: var(--cjk-serif);
 }
+.chinese { font-size: 2.2rem; letter-spacing: .06em; }
 
 .pinyin {
   font-size: .85rem;
@@ -376,13 +372,7 @@ textarea::placeholder { color: #bbb; }
   margin-bottom: 18px;
 }
 
-.daily-chinese {
-  font-size: 3.2rem;
-  color: var(--red);
-  font-weight: 700;
-  letter-spacing: .08em;
-  font-family: var(--cjk-serif);
-}
+.daily-chinese { font-size: 3.2rem; letter-spacing: .08em; }
 
 .daily-pinyin {
   font-size: 1rem;
@@ -432,14 +422,7 @@ textarea::placeholder { color: #bbb; }
   text-align: center;
 }
 
-.quiz-chinese {
-  font-size: 2.8rem;
-  color: var(--red);
-  font-weight: 700;
-  letter-spacing: .08em;
-  margin-bottom: 6px;
-  font-family: var(--cjk-serif);
-}
+.quiz-chinese { font-size: 2.8rem; letter-spacing: .08em; margin-bottom: 6px; }
 
 .quiz-pinyin {
   font-size: .95rem;
@@ -583,7 +566,7 @@ textarea::placeholder { color: #bbb; }
 
 <!-- ── Main UI ───────────────────────────────────────────────────────────── -->
 <header>
-  <h1><span style="font-family:var(--cjk-serif)">成语</span> Chinese Idioms</h1>
+  <h1><span>成语</span> Chinese Idioms</h1>
   <p>成语 (chengyu) are traditional Chinese idiomatic expressions. Derived from ancient literature, historical events, or philosophical texts, they function as condensed metaphors or moral lessons.</p>
 </header>
 
