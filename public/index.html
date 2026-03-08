@@ -769,13 +769,16 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       ctx.save();
       let alpha = b.opacity;
       if (headerRect) {
+        const FADE = 40; // feather zone in px
         const bTop   = b.y - b.fontSize;
         const bBot   = b.y + b.fontSize * 0.2;
         const bRight = b.x + b.fontSize * b.text.length * 0.6;
-        if (bRight > headerRect.left && b.x < headerRect.right &&
-            bBot   > headerRect.top  && bTop < headerRect.bottom) {
-          alpha *= 0.7;
-        }
+        // horizontal overlap
+        const hOverlap = Math.min(bRight - headerRect.left, headerRect.right - b.x, FADE) / FADE;
+        // vertical overlap
+        const vOverlap = Math.min(bBot - headerRect.top, headerRect.bottom - bTop, FADE) / FADE;
+        const t = Math.max(0, Math.min(1, hOverlap)) * Math.max(0, Math.min(1, vOverlap));
+        alpha *= 1 - t * 0.3;
       }
       ctx.globalAlpha = alpha;
       ctx.font        = `700 ${b.fontSize}px serif`;
