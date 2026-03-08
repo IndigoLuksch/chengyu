@@ -11,7 +11,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --cjk-serif: 'Noto Serif SC','Songti SC','STSong','Noto Serif CJK SC','Source Han Serif SC',SimSun,serif;
+  --cjk-serif: 'Songti SC','STSong','Noto Serif SC','Noto Serif CJK SC','Source Han Serif SC',SimSun,serif;
 }
 
 :root {
@@ -825,7 +825,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
         alpha *= 1 - t * 0.55;
       }
       ctx.globalAlpha = alpha;
-      ctx.font        = `700 ${b.fontSize}px serif`;
+      ctx.font        = `700 ${b.fontSize}px 'Songti SC',STSong,'Noto Serif SC',serif`;
       ctx.fillStyle   = "#8b1a1a";
       ctx.fillText(b.text, b.x, b.y);
       ctx.restore();
@@ -833,7 +833,8 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
 
     requestAnimationFrame(frame);
   }
-  frame();
+  // Wait for Noto Serif SC to load before starting animation so canvas uses it
+  document.fonts.load("700 1em 'Noto Serif SC'").finally(() => frame());
 }
 stepActive("emb", "Decoding…");
 
