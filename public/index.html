@@ -836,9 +836,9 @@ const extractorPromise = pipeline(
 ).then(e => { extractor = e; extractorReady = true; })
  .catch(err => { console.error("Model failed to load:", err); });
 
-// Animate a fake 0→100% progress over 0.99s, then show UI
+// Animate a fake 0→100% progress over 0.49s, then show UI
 const sub      = document.getElementById("sub-model");
-const FAKE_MS  = 990;
+const FAKE_MS  = 490;
 const INTERVAL = 30;
 let   fakeT    = 0;
 await new Promise(resolve => {
