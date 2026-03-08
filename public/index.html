@@ -737,12 +737,13 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       .map(sel => document.querySelector(sel))
       .filter(Boolean)
       .map(el => el.getBoundingClientRect());
+    // Density calibrated to 27 bubbles at 1366×768 (11" laptop)
+    const REF_AREA = 1366 * 768;
+    const targetCount = Math.max(5, Math.round(27 * (logicalW * logicalH) / REF_AREA));
+    while (bubbles.length < targetCount) bubbles.push(randomBubble(false));
+    if (bubbles.length > targetCount) bubbles.splice(targetCount);
   }
-  resize();
-  let resizeTimer;
-  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150); });
 
-  const BUBBLE_COUNT = 27;
   const bubbles = [];
   const mouse = { x: -9999, y: -9999 };
   window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
@@ -764,7 +765,9 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
     };
   }
 
-  for (let i = 0; i < BUBBLE_COUNT; i++) bubbles.push(randomBubble(false));
+  resize();
+  let resizeTimer;
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150); });
 
   function frame() {
     ctx.clearRect(0, 0, logicalW, logicalH);
