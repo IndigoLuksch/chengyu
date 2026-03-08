@@ -809,7 +809,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
           const vO = Math.min(bBot   - r.top,  r.bottom - bTop, FADE) / FADE;
           t = Math.max(t, Math.max(0, Math.min(1, hO)) * Math.max(0, Math.min(1, vO)));
         }
-        alpha *= 1 - t * 0.3;
+        alpha *= 1 - t * 0.55;
       }
       ctx.globalAlpha = alpha;
       ctx.font        = `700 ${b.fontSize}px serif`;
