@@ -573,7 +573,7 @@ textarea::placeholder { color: #bbb; }
 
 <!-- ── Main UI ───────────────────────────────────────────────────────────── -->
 <header>
-  <h1>成语 Chinese Idioms</h1>
+  <h1><span style="font-family:serif">成语</span> Chinese Idioms</h1>
   <p>成语 (chengyu) are traditional Chinese idiomatic expressions. Derived from ancient literature, historical events, or philosophical texts, they function as condensed metaphors or moral lessons.</p>
 </header>
 
@@ -721,14 +721,17 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
   const ctx    = canvas.getContext("2d");
   const chars  = IDIOMS.map(d => d.c);  // just the 4-char Chinese strings
 
+  let headerRect = null;
   function resize() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
+    const h = document.querySelector("header");
+    if (h) headerRect = h.getBoundingClientRect();
   }
   resize();
   window.addEventListener("resize", resize);
 
-  const BUBBLE_COUNT = 18;
+  const BUBBLE_COUNT = 27;
   const bubbles = [];
 
   function randomBubble(startAtBottom) {
@@ -764,7 +767,17 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       }
 
       ctx.save();
-      ctx.globalAlpha = b.opacity;
+      let alpha = b.opacity;
+      if (headerRect) {
+        const bTop   = b.y - b.fontSize;
+        const bBot   = b.y + b.fontSize * 0.2;
+        const bRight = b.x + b.fontSize * b.text.length * 0.6;
+        if (bRight > headerRect.left && b.x < headerRect.right &&
+            bBot   > headerRect.top  && bTop < headerRect.bottom) {
+          alpha *= 0.7;
+        }
+      }
+      ctx.globalAlpha = alpha;
       ctx.font        = `700 ${b.fontSize}px serif`;
       ctx.fillStyle   = "#8b1a1a";
       ctx.fillText(b.text, b.x, b.y);
