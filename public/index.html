@@ -733,6 +733,9 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
 
   const BUBBLE_COUNT = 27;
   const bubbles = [];
+  const mouse = { x: -9999, y: -9999 };
+  window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener("mouseleave", () => { mouse.x = -9999; mouse.y = -9999; });
 
   function randomBubble(startAtBottom) {
     const fontSize = 18 + Math.random() * 22;  // 18–40px
@@ -754,6 +757,16 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (const b of bubbles) {
+      // Mouse repulsion
+      const REPEL_R = 120, REPEL_STR = 2.5;
+      const dx = b.x - mouse.x, dy = b.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < REPEL_R && dist > 0) {
+        const force = (1 - dist / REPEL_R) * REPEL_STR;
+        b.x += (dx / dist) * force;
+        b.y += (dy / dist) * force;
+      }
+
       b.y    -= b.speed;
       b.x    += b.drift;
 
