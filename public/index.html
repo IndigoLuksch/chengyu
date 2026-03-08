@@ -36,6 +36,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  will-change: transform;
 }
 
 header, .mode-toggle, #search-section, #quiz-section, #daily-section, #loader {
@@ -722,28 +723,37 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
   const chars  = IDIOMS.map(d => d.c);  // just the 4-char Chinese strings
 
   let headerRect = null;
+  let logicalW = window.innerWidth, logicalH = window.innerHeight;
   function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const h = document.querySelector("header");
-    if (h) headerRect = h.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    logicalW = window.innerWidth;
+    logicalH = window.innerHeight;
+    canvas.width  = logicalW * dpr;
+    canvas.height = logicalH * dpr;
+    canvas.style.width  = logicalW + "px";
+    canvas.style.height = logicalH + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const hdr = document.querySelector("header");
+    if (hdr) headerRect = hdr.getBoundingClientRect();
   }
   resize();
-  window.addEventListener("resize", resize);
+  let resizeTimer;
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150); });
 
   const BUBBLE_COUNT = 27;
   const bubbles = [];
   const mouse = { x: -9999, y: -9999 };
   window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
   window.addEventListener("mouseleave", () => { mouse.x = -9999; mouse.y = -9999; });
+  // No touch repulsion — no visible cursor on mobile
 
   function randomBubble(startAtBottom) {
     const fontSize = 18 + Math.random() * 22;  // 18–40px
     return {
       text:     chars[Math.floor(Math.random() * chars.length)],
-      x:        Math.random() * window.innerWidth,
-      y:        startAtBottom ? window.innerHeight + fontSize * 2
-                              : Math.random() * window.innerHeight,
+      x:        Math.random() * logicalW,
+      y:        startAtBottom ? logicalH + fontSize * 2
+                              : Math.random() * logicalH,
       speed:    0.25 + Math.random() * 0.55,   // px per frame
       fontSize,
       opacity:  0.10 + Math.random() * 0.30,   // 0.10–0.40 (60–90% transparent)
@@ -755,7 +765,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
   for (let i = 0; i < BUBBLE_COUNT; i++) bubbles.push(randomBubble(false));
 
   function frame() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, logicalW, logicalH);
 
     for (const b of bubbles) {
       // Mouse repulsion — velocity-based for smooth response
@@ -776,8 +786,8 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       b.y    += b.vy;
 
       // Wrap horizontally
-      if (b.x < -40)              b.x = canvas.width  + 40;
-      if (b.x > canvas.width + 40) b.x = -40;
+      if (b.x < -40)           b.x = logicalW + 40;
+      if (b.x > logicalW + 40) b.x = -40;
 
       // Reset when floated off the top
       if (b.y < -b.fontSize * 2) {
