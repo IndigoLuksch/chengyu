@@ -748,6 +748,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       fontSize,
       opacity:  0.10 + Math.random() * 0.30,   // 0.10–0.40 (60–90% transparent)
       drift:    (Math.random() - 0.5) * 0.3,   // gentle horizontal sway
+      vx: 0, vy: 0,                             // repulsion velocity
     };
   }
 
@@ -757,18 +758,22 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (const b of bubbles) {
-      // Mouse repulsion
-      const REPEL_R = 120, REPEL_STR = 2.5;
+      // Mouse repulsion — velocity-based for smooth response
+      const REPEL_R = 220, REPEL_ACC = 0.6, DAMPING = 0.88;
       const dx = b.x - mouse.x, dy = b.y - mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < REPEL_R && dist > 0) {
-        const force = (1 - dist / REPEL_R) * REPEL_STR;
-        b.x += (dx / dist) * force;
-        b.y += (dy / dist) * force;
+        const force = (1 - dist / REPEL_R) * REPEL_ACC;
+        b.vx += (dx / dist) * force;
+        b.vy += (dy / dist) * force;
       }
+      b.vx *= DAMPING;
+      b.vy *= DAMPING;
 
       b.y    -= b.speed;
       b.x    += b.drift;
+      b.x    += b.vx;
+      b.y    += b.vy;
 
       // Wrap horizontally
       if (b.x < -40)              b.x = canvas.width  + 40;
