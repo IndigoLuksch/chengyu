@@ -797,7 +797,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       b.y    += b.vy;
 
       // Wrap horizontally — margin accounts for full text width
-      const textW = b.fontSize * b.text.length * 0.6;
+      const textW = b.fontSize * b.text.length * 1.1; // CJK chars are ~square
       if (b.x + textW < 0)      b.x = logicalW;
       if (b.x > logicalW)       b.x = -textW;
 
@@ -812,7 +812,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
         const FADE  = 40;
         const bTop   = b.y - b.fontSize;
         const bBot   = b.y + b.fontSize * 0.2;
-        const bRight = b.x + b.fontSize * b.text.length * 0.6;
+        const bRight = b.x + b.fontSize * b.text.length * 1.1;
         let t = 0;
         for (const r of fadeRects) {
           const hO = Math.min(bRight - r.left, r.right - b.x, FADE) / FADE;
