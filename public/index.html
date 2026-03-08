@@ -796,9 +796,10 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
       b.x    += b.vx;
       b.y    += b.vy;
 
-      // Wrap horizontally
-      if (b.x < -40)           b.x = logicalW + 40;
-      if (b.x > logicalW + 40) b.x = -40;
+      // Wrap horizontally — margin accounts for full text width
+      const textW = b.fontSize * b.text.length * 0.6;
+      if (b.x + textW < 0)      b.x = logicalW;
+      if (b.x > logicalW)       b.x = -textW;
 
       // Reset when floated off the top
       if (b.y < -b.fontSize * 2) {
