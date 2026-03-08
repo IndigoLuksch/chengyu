@@ -722,7 +722,7 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
   const ctx    = canvas.getContext("2d");
   const chars  = IDIOMS.map(d => d.c);  // just the 4-char Chinese strings
 
-  let headerRect = null;
+  let fadeRects = [];
   let logicalW = window.innerWidth, logicalH = window.innerHeight;
   function resize() {
     const dpr = window.devicePixelRatio || 1;
@@ -733,8 +733,10 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
     canvas.style.width  = logicalW + "px";
     canvas.style.height = logicalH + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const hdr = document.querySelector("header");
-    if (hdr) headerRect = hdr.getBoundingClientRect();
+    fadeRects = ["header h1", "header p"]
+      .map(sel => document.querySelector(sel))
+      .filter(Boolean)
+      .map(el => el.getBoundingClientRect());
   }
   resize();
   let resizeTimer;
@@ -796,16 +798,17 @@ stepDone("data", `${IDIOMS.length} idioms loaded`);
 
       ctx.save();
       let alpha = b.opacity;
-      if (headerRect) {
-        const FADE = 40; // feather zone in px
+      if (fadeRects.length) {
+        const FADE  = 40;
         const bTop   = b.y - b.fontSize;
         const bBot   = b.y + b.fontSize * 0.2;
         const bRight = b.x + b.fontSize * b.text.length * 0.6;
-        // horizontal overlap
-        const hOverlap = Math.min(bRight - headerRect.left, headerRect.right - b.x, FADE) / FADE;
-        // vertical overlap
-        const vOverlap = Math.min(bBot - headerRect.top, headerRect.bottom - bTop, FADE) / FADE;
-        const t = Math.max(0, Math.min(1, hOverlap)) * Math.max(0, Math.min(1, vOverlap));
+        let t = 0;
+        for (const r of fadeRects) {
+          const hO = Math.min(bRight - r.left, r.right - b.x, FADE) / FADE;
+          const vO = Math.min(bBot   - r.top,  r.bottom - bTop, FADE) / FADE;
+          t = Math.max(t, Math.max(0, Math.min(1, hO)) * Math.max(0, Math.min(1, vO)));
+        }
         alpha *= 1 - t * 0.3;
       }
       ctx.globalAlpha = alpha;
