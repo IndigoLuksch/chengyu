@@ -7,6 +7,9 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --cjk-serif: 'Songti SC','STSong','Noto Serif CJK SC','Source Han Serif SC',SimSun,serif;
+}
 
 :root {
   --red:    #8b1a1a;
@@ -224,6 +227,7 @@ textarea::placeholder { color: #bbb; }
   color: var(--red);
   font-weight: 700;
   letter-spacing: .06em;
+  font-family: var(--cjk-serif);
 }
 
 .pinyin {
@@ -374,6 +378,7 @@ textarea::placeholder { color: #bbb; }
   color: var(--red);
   font-weight: 700;
   letter-spacing: .08em;
+  font-family: var(--cjk-serif);
 }
 
 .daily-pinyin {
@@ -430,6 +435,7 @@ textarea::placeholder { color: #bbb; }
   font-weight: 700;
   letter-spacing: .08em;
   margin-bottom: 6px;
+  font-family: var(--cjk-serif);
 }
 
 .quiz-pinyin {
@@ -574,7 +580,7 @@ textarea::placeholder { color: #bbb; }
 
 <!-- ── Main UI ───────────────────────────────────────────────────────────── -->
 <header>
-  <h1><span style="font-family:serif">成语</span> Chinese Idioms</h1>
+  <h1><span style="font-family:var(--cjk-serif)">成语</span> Chinese Idioms</h1>
   <p>成语 (chengyu) are traditional Chinese idiomatic expressions. Derived from ancient literature, historical events, or philosophical texts, they function as condensed metaphors or moral lessons.</p>
 </header>
 
