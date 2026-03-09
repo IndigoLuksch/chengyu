@@ -925,7 +925,7 @@ async function search() {
     // Expand short queries to give the model more semantic context
     const words        = query.trim().split(/\s+/);
     const expandedQuery = words.length < 3
-      ? `a situation or story involving ${query}`
+      ? `Associated with ${query}`
       : query;
 
     // BGE requires "query: " prefix at search time
