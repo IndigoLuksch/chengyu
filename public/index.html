@@ -925,7 +925,7 @@ async function search() {
     // Expand short queries to give the model more semantic context
     const words        = query.trim().split(/\s+/);
     const expandedQuery = words.length < 3
-      ? `Associated with ${query}`
+      ? `One who is ${query}, or the possession of ${query}`
       : query;
 
     // BGE requires "query: " prefix at search time
