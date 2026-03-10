@@ -945,7 +945,7 @@ async function search() {
 
     statusEl.textContent = `Comparing with ${N} idioms…`;
 
-    const scores = new Float32Array(N);c
+    const scores = new Float32Array(N);
     for (let i = 0; i < N; i++) scores[i] = dotSim(i, queryVec);
 
     const top = Array.from({ length: N }, (_, i) => i)
