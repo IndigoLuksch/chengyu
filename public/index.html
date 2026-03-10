@@ -7,6 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet">
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('YOUR_POSTHOG_API_KEY', {
+    api_host: 'https://us.i.posthog.com',
+    person_profiles: 'identified_only',
+  });
+</script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -999,6 +1006,7 @@ async function search() {
           ? `${d.chinese} (${d.pinyin})\n"${d.literal}"\n\n${d.meaning}\n\n— from www.chengyu.app`
           : `${d.chinese} (${d.pinyin})\n\n${d.meaning}\n\n— from www.chengyu.app`;
         await navigator.clipboard.writeText(text);
+        posthog.capture('share', { source: 'search_result', idiom: d.chinese });
         const bubble = document.createElement("div");
         bubble.textContent = "Copied!";
         bubble.style.cssText = `
@@ -1013,6 +1021,7 @@ async function search() {
     });
 
     statusEl.textContent = "Showing top 3 matches";
+    posthog.capture('search', { query, result_count: top.length });
   } catch (e) {
     statusEl.textContent = "Error: " + e.message;
   }
@@ -1048,6 +1057,7 @@ resultsEl.addEventListener("click", e => {
   btn.classList.add("speaking");
   utt.onend = utt.onerror = () => btn.classList.remove("speaking");
   speechSynthesis.speak(utt);
+  posthog.capture('tts', { source: 'search_result', idiom: text });
 });
 
 btn.addEventListener("click", search);
@@ -1083,6 +1093,7 @@ modeToggle.addEventListener("click", e => {
   updateSlider(btn);
 
   const mode = btn.dataset.mode;
+  posthog.capture('mode_switch', { mode });
   searchSection.classList.toggle("section-hidden", mode !== "search");
   quizSection.classList.toggle("section-hidden", mode !== "quiz");
   dailySection.classList.toggle("section-hidden", mode !== "daily");
@@ -1125,6 +1136,7 @@ document.getElementById("daily-share").addEventListener("click", async () => {
   const text = `成语 of the day: ${idiom.c} (${idiom.p})\n"${idiom.l}"\n\n${idiom.m}\n\n— from www.chengyu.app`;
   const btn = document.getElementById("daily-share");
   await navigator.clipboard.writeText(text);
+  posthog.capture('share', { source: 'daily', idiom: idiom.c });
 
   // Confirmation bubble
   const bubble = document.createElement("div");
@@ -1151,6 +1163,7 @@ document.getElementById("daily-speak").addEventListener("click", () => {
   speakBtn.classList.add("speaking");
   utt.onend = utt.onerror = () => speakBtn.classList.remove("speaking");
   speechSynthesis.speak(utt);
+  posthog.capture('tts', { source: 'daily', idiom: text });
 });
 
 // ── Quiz logic ───────────────────────────────────────────────────────────────
@@ -1216,6 +1229,11 @@ async function gradeQuiz() {
   else if (sim >= 0.68) { stars = "★★☆"; label = "Almost!"; }
   else                  { stars = "★☆☆"; label = "Not quite!"; }
 
+  posthog.capture('quiz_graded', {
+    stars: stars.trim(),
+    label,
+    similarity_score: Math.round(sim * 100) / 100,
+  });
   qStars.textContent = `${stars}  ${label}`;
   qYour.textContent  = answer;
   qActual.textContent = currentQuiz.m;
@@ -1224,7 +1242,7 @@ async function gradeQuiz() {
 }
 
 qSubmit.addEventListener("click", gradeQuiz);
-qSkip.addEventListener("click", loadQuizIdiom);
+qSkip.addEventListener("click", () => { posthog.capture('quiz_skip'); loadQuizIdiom(); });
 qNext.addEventListener("click", loadQuizIdiom);
 qInput.addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); gradeQuiz(); }
