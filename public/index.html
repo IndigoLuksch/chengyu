@@ -609,6 +609,7 @@ textarea::placeholder { color: #bbb; }
 <!-- ── Search section ──────────────────────────────────────────────────── -->
 <div id="search-section">
   <div class="search-card">
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Describe a situation, feeling, or concept in English and we'll find the Chinese idiom that fits it best.</p>
     <textarea id="situation"
       placeholder="e.g. 'superhuman abilities'"></textarea>
     <div class="btn-row">
@@ -944,7 +945,7 @@ async function search() {
 
     statusEl.textContent = `Comparing with ${N} idioms…`;
 
-    const scores = new Float32Array(N);
+    const scores = new Float32Array(N);c
     for (let i = 0; i < N; i++) scores[i] = dotSim(i, queryVec);
 
     const top = Array.from({ length: N }, (_, i) => i)
