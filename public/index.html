@@ -1243,7 +1243,7 @@ async function gradeQuiz() {
     label,
     similarity_score: Math.round(sim * 100) / 100,
   });
-  qStars.textContent = `${stars}  ${label}`;
+  qStars.innerHTML = `<span style="font-family:inherit">${stars}</span><span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1.1rem;margin-left:8px">${label}</span>`;
   qYour.textContent  = answer;
   qActual.textContent = currentQuiz.m;
   document.getElementById("quiz-score").textContent = `Similarity score: ${Math.round(sim * 100)}%`;
