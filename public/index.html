@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>成语 Chinese Idioms</title>
+<title>成语 Chengyu — Chinese Idiom Search & Quiz</title>
+<meta name="description" content="Search thousands of Chinese chengyu (成语) by meaning, situation, or feeling. Learn idioms with daily picks and an interactive quiz. Free chengyu dictionary.">
+<meta name="keywords" content="chengyu, 成语, Chinese idioms, chengyu search, chengyu quiz, chengyu dictionary, learn Chinese, Chinese proverbs">
+<meta property="og:title" content="成语 Chengyu — Chinese Idiom Search & Quiz">
+<meta property="og:description" content="Search thousands of Chinese chengyu by meaning, situation, or feeling. Daily idiom picks and interactive quiz.">
+<meta property="og:url" content="https://chengyu.app">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://chengyu.app">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧧</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1101,10 +1108,20 @@ modeToggle.addEventListener("click", e => {
   searchSection.classList.toggle("section-hidden", mode !== "search");
   quizSection.classList.toggle("section-hidden", mode !== "quiz");
   dailySection.classList.toggle("section-hidden", mode !== "daily");
+  history.replaceState(null, "", mode === "search" ? "/" : `/#${mode}`);
 
   if (mode === "quiz") loadQuizIdiom();
   if (mode === "daily") loadDailyIdiom();
 });
+
+// Load correct tab from URL hash on page load
+(function () {
+  const hash = location.hash.replace("#", "");
+  if (hash === "quiz" || hash === "daily") {
+    const btn = modeToggle.querySelector(`[data-mode="${hash}"]`);
+    if (btn) btn.click();
+  }
+})();
 
 // ── Daily idiom ──────────────────────────────────────────────────────────────
 // Deterministic daily selection — cycle > 3 years (4298 idioms ≈ 11.8 years)
