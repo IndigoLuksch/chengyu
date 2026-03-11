@@ -3,16 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>成语 Chengyu — Chinese Idiom Search & Quiz</title>
-<meta name="description" content="Search thousands of Chinese chengyu (成语) by meaning, situation, or feeling. Learn idioms with daily picks and an interactive quiz. Free chengyu dictionary.">
-<meta name="keywords" content="chengyu, 成语, Chinese idioms, chengyu search, chengyu quiz, chengyu dictionary, learn Chinese, Chinese proverbs">
-<meta property="og:title" content="成语 Chengyu — Chinese Idiom Search & Quiz">
-<meta property="og:description" content="Search thousands of Chinese chengyu by meaning, situation, or feeling. Daily idiom picks and interactive quiz.">
-<meta property="og:url" content="https://chengyu.app">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://chengyu.app">
-<meta name="google-site-verification" content="6pkU1gcZzgkkn6L5QXOeUnmDygRtPT3QTSyt_qMN4gc" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧧</text></svg>">
+<title>成语 Chinese Idioms</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet">
@@ -625,7 +616,7 @@ textarea::placeholder { color: #bbb; }
   <div class="search-card">
     <p style="font-size:.9rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Describe a situation, feeling, or concept in English and we'll find the Chinese idiom that fits it best.</p>
     <textarea id="situation"
-      placeholder="e.g. 'when small actions cause big problems'"></textarea>
+      placeholder="e.g. 'superhuman abilities'"></textarea>
     <div class="btn-row">
       <button id="search-btn" disabled>Loading…</button>
       <span class="hint" id="hint" style="display:none">Enter to search</span>
@@ -1040,7 +1031,6 @@ async function search() {
 
     statusEl.textContent = "Showing top 3 matches";
     posthog.capture('search', { query, result_count: top.length });
-    setTimeout(() => resultsEl.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
   } catch (e) {
     statusEl.textContent = "Error: " + e.message;
   }
@@ -1050,25 +1040,33 @@ async function search() {
 }
 
 // ── Text-to-speech ────────────────────────────────────────────────────────────
-let currentAudio = null;
+let zhVoice = null;
 
-function playChengyu(btn, source) {
-  const text = btn.dataset.text;
-  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-  document.querySelectorAll(".speak-btn.speaking").forEach(b => b.classList.remove("speaking"));
-
-  const audio = new Audio(`audio/${encodeURIComponent(text)}.mp3`);
-  currentAudio = audio;
-  btn.classList.add("speaking");
-  audio.onended = audio.onerror = () => { btn.classList.remove("speaking"); currentAudio = null; };
-  audio.play();
-  posthog.capture('tts', { source, idiom: text });
+function loadZhVoice() {
+  const voices = speechSynthesis.getVoices();
+  // prefer zh-TW (macOS Siri) or zh-CN neural voices — both sound less robotic
+  zhVoice = voices.find(v => v.lang === "zh-TW")
+           || voices.find(v => v.lang === "zh-CN")
+           || voices.find(v => v.lang.startsWith("zh"))
+           || null;
 }
+speechSynthesis.addEventListener("voiceschanged", loadZhVoice);
+loadZhVoice();
 
 resultsEl.addEventListener("click", e => {
   const btn = e.target.closest(".speak-btn");
   if (!btn) return;
-  playChengyu(btn, 'search_result');
+  window.speechSynthesis.cancel();
+  // strip Chinese punctuation that causes fragmentation
+  const text = btn.dataset.text.replace(/[^\u4e00-\u9fff\u3400-\u4dbf]/g, "");
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = "zh-CN";
+  utt.rate = 0.65;
+  if (zhVoice) utt.voice = zhVoice;
+  btn.classList.add("speaking");
+  utt.onend = utt.onerror = () => btn.classList.remove("speaking");
+  speechSynthesis.speak(utt);
+  posthog.capture('tts', { source: 'search_result', idiom: text });
 });
 
 btn.addEventListener("click", search);
@@ -1108,20 +1106,10 @@ modeToggle.addEventListener("click", e => {
   searchSection.classList.toggle("section-hidden", mode !== "search");
   quizSection.classList.toggle("section-hidden", mode !== "quiz");
   dailySection.classList.toggle("section-hidden", mode !== "daily");
-  history.replaceState(null, "", mode === "search" ? "/" : `/#${mode}`);
 
   if (mode === "quiz") loadQuizIdiom();
   if (mode === "daily") loadDailyIdiom();
 });
-
-// Load correct tab from URL hash on page load
-(function () {
-  const hash = location.hash.replace("#", "");
-  if (hash === "quiz" || hash === "daily") {
-    const btn = modeToggle.querySelector(`[data-mode="${hash}"]`);
-    if (btn) btn.click();
-  }
-})();
 
 // ── Daily idiom ──────────────────────────────────────────────────────────────
 // Deterministic daily selection — cycle > 3 years (4298 idioms ≈ 11.8 years)
@@ -1174,7 +1162,17 @@ document.getElementById("daily-share").addEventListener("click", async () => {
 
 // Daily speak button
 document.getElementById("daily-speak").addEventListener("click", () => {
-  playChengyu(document.getElementById("daily-speak"), 'daily');
+  const speakBtn = document.getElementById("daily-speak");
+  window.speechSynthesis.cancel();
+  const text = speakBtn.dataset.text.replace(/[^\u4e00-\u9fff\u3400-\u4dbf]/g, "");
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = "zh-CN";
+  utt.rate = 0.65;
+  if (zhVoice) utt.voice = zhVoice;
+  speakBtn.classList.add("speaking");
+  utt.onend = utt.onerror = () => speakBtn.classList.remove("speaking");
+  speechSynthesis.speak(utt);
+  posthog.capture('tts', { source: 'daily', idiom: text });
 });
 
 // ── Quiz logic ───────────────────────────────────────────────────────────────
@@ -1264,6 +1262,5 @@ qInput.addEventListener("keydown", e => {
   else { gradeQuiz(); }
 });
 </script>
-<footer style="text-align:center;padding:32px 16px;color:#bbb;font-size:.85rem;margin-top:auto;">Made by Indigo Luksch &amp; Oscar McCann</footer>
 </body>
 </html>
