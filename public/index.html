@@ -1256,7 +1256,10 @@ qSubmit.addEventListener("click", gradeQuiz);
 qSkip.addEventListener("click", () => { posthog.capture('quiz_skip'); loadQuizIdiom(); });
 qNext.addEventListener("click", loadQuizIdiom);
 qInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") { e.preventDefault(); gradeQuiz(); }
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+  if (!qResult.classList.contains("section-hidden")) { loadQuizIdiom(); }
+  else { gradeQuiz(); }
 });
 </script>
 </body>
