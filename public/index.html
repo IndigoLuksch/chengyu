@@ -1243,7 +1243,7 @@ async function gradeQuiz() {
     label,
     similarity_score: Math.round(sim * 100) / 100,
   });
-  qStars.innerHTML = `<span style="font-family:inherit">${stars}</span><span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1.1rem;margin-left:8px">${label}</span>`;
+  qStars.innerHTML = `<span style="font-family:inherit">${stars}</span><span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:1.4rem;font-weight:700;margin-left:10px">${label}</span>`;
   qYour.textContent  = answer;
   qActual.textContent = currentQuiz.m;
   const simScaled = Math.round(Math.max(0, Math.min(1, (sim - 0.45) / (0.76 - 0.45))) * 100);
