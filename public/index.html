@@ -1032,6 +1032,7 @@ async function search() {
 
     statusEl.textContent = "Showing top 3 matches";
     posthog.capture('search', { query, result_count: top.length });
+    setTimeout(() => resultsEl.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
   } catch (e) {
     statusEl.textContent = "Error: " + e.message;
   }
