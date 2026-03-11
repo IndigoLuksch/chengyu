@@ -1040,33 +1040,25 @@ async function search() {
 }
 
 // ── Text-to-speech ────────────────────────────────────────────────────────────
-let zhVoice = null;
+let currentAudio = null;
 
-function loadZhVoice() {
-  const voices = speechSynthesis.getVoices();
-  // prefer zh-TW (macOS Siri) or zh-CN neural voices — both sound less robotic
-  zhVoice = voices.find(v => v.lang === "zh-TW")
-           || voices.find(v => v.lang === "zh-CN")
-           || voices.find(v => v.lang.startsWith("zh"))
-           || null;
+function playChengyu(btn, source) {
+  const text = btn.dataset.text;
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.querySelectorAll(".speak-btn.speaking").forEach(b => b.classList.remove("speaking"));
+
+  const audio = new Audio(`audio/${encodeURIComponent(text)}.mp3`);
+  currentAudio = audio;
+  btn.classList.add("speaking");
+  audio.onended = audio.onerror = () => { btn.classList.remove("speaking"); currentAudio = null; };
+  audio.play();
+  posthog.capture('tts', { source, idiom: text });
 }
-speechSynthesis.addEventListener("voiceschanged", loadZhVoice);
-loadZhVoice();
 
 resultsEl.addEventListener("click", e => {
   const btn = e.target.closest(".speak-btn");
   if (!btn) return;
-  window.speechSynthesis.cancel();
-  // strip Chinese punctuation that causes fragmentation
-  const text = btn.dataset.text.replace(/[^\u4e00-\u9fff\u3400-\u4dbf]/g, "");
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = "zh-CN";
-  utt.rate = 0.65;
-  if (zhVoice) utt.voice = zhVoice;
-  btn.classList.add("speaking");
-  utt.onend = utt.onerror = () => btn.classList.remove("speaking");
-  speechSynthesis.speak(utt);
-  posthog.capture('tts', { source: 'search_result', idiom: text });
+  playChengyu(btn, 'search_result');
 });
 
 btn.addEventListener("click", search);
@@ -1162,17 +1154,7 @@ document.getElementById("daily-share").addEventListener("click", async () => {
 
 // Daily speak button
 document.getElementById("daily-speak").addEventListener("click", () => {
-  const speakBtn = document.getElementById("daily-speak");
-  window.speechSynthesis.cancel();
-  const text = speakBtn.dataset.text.replace(/[^\u4e00-\u9fff\u3400-\u4dbf]/g, "");
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = "zh-CN";
-  utt.rate = 0.65;
-  if (zhVoice) utt.voice = zhVoice;
-  speakBtn.classList.add("speaking");
-  utt.onend = utt.onerror = () => speakBtn.classList.remove("speaking");
-  speechSynthesis.speak(utt);
-  posthog.capture('tts', { source: 'daily', idiom: text });
+  playChengyu(document.getElementById("daily-speak"), 'daily');
 });
 
 // ── Quiz logic ───────────────────────────────────────────────────────────────
