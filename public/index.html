@@ -1005,8 +1005,8 @@ async function search() {
       btn.addEventListener("click", async () => {
         const d = btn.dataset;
         const text = d.literal
-          ? `${d.chinese} (${d.pinyin})\n"${d.literal}"\n\n${d.meaning}\n\n— from www.chengyu.app`
-          : `${d.chinese} (${d.pinyin})\n\n${d.meaning}\n\n— from www.chengyu.app`;
+          ? `${d.chinese} (${d.pinyin})\n"${d.literal}"\n\n${d.meaning}\n\n— from chengyu.app`
+          : `${d.chinese} (${d.pinyin})\n\n${d.meaning}\n\n— from chengyu.app`;
         await navigator.clipboard.writeText(text);
         posthog.capture('share', { source: 'search_result', idiom: d.chinese });
         const bubble = document.createElement("div");
@@ -1135,7 +1135,7 @@ document.getElementById("daily-share").addEventListener("click", async () => {
   const idiom = IDIOMS.filter(d => d.m)[
     ((Math.floor(Date.now() / 86400000) * 2654435761) >>> 0) % IDIOMS.filter(d => d.m).length
   ];
-  const text = `成语 of the day: ${idiom.c} (${idiom.p})\n"${idiom.l}"\n\n${idiom.m}\n\n— from www.chengyu.app`;
+  const text = `成语 of the day: ${idiom.c} (${idiom.p})\n"${idiom.l}"\n\n${idiom.m}\n\n— from chengyu.app`;
   const btn = document.getElementById("daily-share");
   await navigator.clipboard.writeText(text);
   posthog.capture('share', { source: 'daily', idiom: idiom.c });
