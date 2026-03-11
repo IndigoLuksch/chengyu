@@ -954,27 +954,28 @@ async function search() {
     const scores = new Float32Array(N);
     for (let i = 0; i < N; i++) scores[i] = dotSim(i, queryVec);
 
-    const top = Array.from({ length: N }, (_, i) => i)
+    const sorted = Array.from({ length: N }, (_, i) => i)
       .filter(i => IDIOMS[i].m) // skip untranslated
-      .sort((a, b) => scores[b] - scores[a])
-      .slice(0, 3);
+      .sort((a, b) => scores[b] - scores[a]);
 
-    if (top.length === 0) {
+    // If best raw score is below threshold, query has no meaningful match
+    if (scores[sorted[0]] < 0.68) {
       statusEl.textContent = "No good matches found — try describing your situation differently";
       btn.disabled    = false;
       btn.textContent = "Find Idiom";
       return;
     }
 
+    const top = sorted.slice(0, 3);
     const rankLabels = ["Best match", "2nd match", "3rd match"];
 
     top.forEach((idx, rank) => {
       const idiom = IDIOMS[idx];
       const raw = scores[idx];
-      const pct = raw <= 0.7  ? 0
+      const pct = raw <= 0.63 ? 0
                 : raw >= 0.83 ? 100
-                : raw <  0.77 ? Math.round(((raw - 0.7)  / (0.77 - 0.7))  * 70)
-                :               Math.round(70 + ((raw - 0.77) / (0.83 - 0.77)) * 30);
+                : raw <  0.73 ? Math.round(((raw - 0.63) / (0.73 - 0.63)) * 70)
+                :               Math.round(70 + ((raw - 0.73) / (0.83 - 0.73)) * 30);
 
       const card = document.createElement("div");
       card.className = "result-card";
