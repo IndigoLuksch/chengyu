@@ -1227,8 +1227,8 @@ async function gradeQuiz() {
 
   // Grade
   let stars, label;
-  if (sim >= 0.73)      { stars = "★★★"; label = "Excellent!"; }
-  else if (sim >= 0.68) { stars = "★★☆"; label = "Almost!"; }
+  if (sim >= 0.68)      { stars = "★★★"; label = "Excellent!"; }
+  else if (sim >= 0.64) { stars = "★★☆"; label = "Almost!"; }
   else                  { stars = "★☆☆"; label = "Not quite!"; }
 
   posthog.capture('quiz_graded', {
