@@ -1223,7 +1223,7 @@ async function gradeQuiz() {
   const a = answerOut.data, m = meaningOut.data, s = searchOut.data;
   let simM = 0, simS = 0;
   for (let i = 0; i < a.length; i++) { simM += a[i] * m[i]; simS += a[i] * s[i]; }
-  const sim = 0.3 * simM + 0.7 * simS;
+  const sim = 0.7 * simM + 0.3 * simS;
 
   // Grade
   let stars, label;
