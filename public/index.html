@@ -531,6 +531,12 @@ textarea::placeholder { color: #bbb; }
   line-height: 1.4;
 }
 
+.quiz-score {
+  font-size: .8rem;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 480px) {
   header h1 { font-size: 1.9rem; }
@@ -638,6 +644,7 @@ textarea::placeholder { color: #bbb; }
       <div class="quiz-answer-text" id="quiz-your-answer"></div>
       <div class="quiz-label">Actual meaning</div>
       <div class="quiz-actual" id="quiz-actual"></div>
+      <div class="quiz-score" id="quiz-score"></div>
       <div class="quiz-btn-row" style="margin-top:14px">
         <button class="quiz-btn quiz-submit" id="quiz-next">Next</button>
       </div>
@@ -1239,6 +1246,7 @@ async function gradeQuiz() {
   qStars.textContent = `${stars}  ${label}`;
   qYour.textContent  = answer;
   qActual.textContent = currentQuiz.m;
+  document.getElementById("quiz-score").textContent = `Similarity score: ${Math.round(sim * 100)}%`;
   document.getElementById("quiz-action-row").classList.add("section-hidden");
   qResult.classList.remove("section-hidden");
 }
