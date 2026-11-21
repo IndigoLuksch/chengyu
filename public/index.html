@@ -6,7 +6,7 @@
 <title>成语 Chinese Idioms</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
 <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="vi init Ti Ci ft Ri Oi ki capture calculateEventProperties Li register register_once register_for_session unregister unregister_for_session zi getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Ni Ai createPersonProfile setInternalOrTestUser Ui Si Hi opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing Fi debug bt ji getPageViewId captureTraceFeedback captureTraceMetric wi".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_adZoBD4EgyB00cfvOM44Jj15T7fR47LiWzyiHOksjqu', {
@@ -537,8 +537,137 @@ textarea::placeholder { color: #bbb; }
   margin-top: 10px;
 }
 
+/* ── zizijuju promo ──
+   The whole card is clickable: the heading's <a> stretches over it (::after), so the link's anchor text
+   stays the heading ("字字句句 – Mandarin pronunciation & Chinese idioms") for search engines. */
+.zz-promo {
+  /* the app's own card colours, scoped here so they don't clash with this page's --red */
+  --zz-red: #c8102e;
+  --zz-gold: #f2c230;
+  --zz-gold-deep: #c9971c;
+  --zz-paper: #fff9ee;
+  --zz-serif: "Noto Serif SC", "Songti SC", serif;
+  --zz-display: "EB Garamond", "Noto Serif SC", Georgia, serif;
+  --zz-meander-gold: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='36' height='36' viewBox='0 0 36 36'%3E%3Cdefs%3E%3Cg id='e' fill='none' stroke='%23f2c230' stroke-width='1.25'%3E%3Cpath d='M0 .75H12M0 10.5H12M10.5 10.5V2.75H3V8.25H8.25V5.25H5.5'/%3E%3C/g%3E%3Cg id='c' fill='none' stroke='%23f2c230' stroke-width='1.25'%3E%3Cpath d='M.75 12V.75H12M10.5 12V10.5H12'/%3E%3Cpath d='M3.25 3.25h5.5v5.5h-5.5z'/%3E%3Cpath d='M5.3 5.3h1.4v1.4H5.3z' fill='%23f2c230' stroke='none'/%3E%3C/g%3E%3C/defs%3E%3Cuse xlink:href='%23c'/%3E%3Cuse xlink:href='%23e' transform='translate(12 0)'/%3E%3Cuse xlink:href='%23c' transform='translate(24 0) rotate(90 6 6)'/%3E%3Cuse xlink:href='%23e' transform='translate(0 12) rotate(-90 6 6)'/%3E%3Cuse xlink:href='%23e' transform='translate(24 12) rotate(90 6 6)'/%3E%3Cuse xlink:href='%23c' transform='translate(0 24) rotate(-90 6 6)'/%3E%3Cuse xlink:href='%23e' transform='translate(12 24) rotate(180 6 6)'/%3E%3Cuse xlink:href='%23c' transform='translate(24 24) rotate(180 6 6)'/%3E%3C/svg%3E");
+  --zz-meander-red: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='36' height='36' viewBox='0 0 36 36'%3E%3Cdefs%3E%3Cg id='e' fill='none' stroke='%238e1b1b' stroke-width='1.25'%3E%3Cpath d='M0 .75H12M0 10.5H12M10.5 10.5V2.75H3V8.25H8.25V5.25H5.5'/%3E%3C/g%3E%3Cg id='c' fill='none' stroke='%238e1b1b' stroke-width='1.25'%3E%3Cpath d='M.75 12V.75H12M10.5 12V10.5H12'/%3E%3Cpath d='M3.25 3.25h5.5v5.5h-5.5z'/%3E%3Cpath d='M5.3 5.3h1.4v1.4H5.3z' fill='%238e1b1b' stroke='none'/%3E%3C/g%3E%3C/defs%3E%3Cuse xlink:href='%23c'/%3E%3Cuse xlink:href='%23e' transform='translate(12 0)'/%3E%3Cuse xlink:href='%23c' transform='translate(24 0) rotate(90 6 6)'/%3E%3Cuse xlink:href='%23e' transform='translate(0 12) rotate(-90 6 6)'/%3E%3Cuse xlink:href='%23e' transform='translate(24 12) rotate(90 6 6)'/%3E%3Cuse xlink:href='%23c' transform='translate(0 24) rotate(-90 6 6)'/%3E%3Cuse xlink:href='%23e' transform='translate(12 24) rotate(180 6 6)'/%3E%3Cuse xlink:href='%23c' transform='translate(24 24) rotate(180 6 6)'/%3E%3C/svg%3E");
+  --zz-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .85 -.34'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 860px;
+  margin: 28px auto 0;
+  padding: 26px 28px;
+  background: var(--card);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  box-shadow: 0 2px 20px rgba(0,0,0,.07);
+  transition: border-color .15s, box-shadow .15s;
+}
+.zz-promo:hover { border-color: var(--red-lt); box-shadow: 0 4px 24px rgba(139,26,26,.1); }
+.zz-body { flex: 1; min-width: 0; }
+.zz-title { margin-bottom: 10px; line-height: 1.25; }
+.zz-title a { color: var(--text); text-decoration: none; }
+.zz-title a::after { content: ""; position: absolute; inset: 0; border-radius: 16px; z-index: 2; }
+.zz-title a:focus-visible { outline: none; }
+.zz-title a:focus-visible::after { outline: 2px solid var(--red); outline-offset: 3px; }
+.zz-name { display: block; font-family: var(--cjk-serif); color: var(--red); font-weight: 700; font-size: 1.6rem; letter-spacing: .08em; }
+.zz-text { color: #555; font-size: .93rem; line-height: 1.55; }
+.zz-text strong { color: var(--text); font-weight: 600; }
+.zz-cta  { display: inline-block; margin-top: 14px; color: var(--red); font-weight: 600; font-size: .92rem; }
+.zz-promo:hover .zz-cta { text-decoration: underline; }
+
+/* A fan of three collectible cards, ported from the app's IdiomCard (IdiomCard.css). Sizes in cqw are fractions
+   of each card's own width. */
+.zz-fan { position: relative; flex: none; width: 230px; height: 170px; }
+.zzc {
+  position: absolute; top: 12px; left: 50%;
+  width: 100px; margin-left: -50px;
+  display: grid; grid-template-rows: minmax(0, 1fr);
+  aspect-ratio: 5 / 7; border-radius: 10px; padding: 3.2%;
+  overflow: hidden; container-type: inline-size; isolation: isolate;
+  transition: transform .35s cubic-bezier(.3,.7,.3,1);
+}
+.zzc:nth-child(1) { transform: translateX(-66px) translateY(8px) rotate(-12deg); }
+.zzc:nth-child(2) { transform: translateX(66px) translateY(8px) rotate(12deg); }
+.zzc:nth-child(3) { transform: translateY(-5px); z-index: 1; width: 108px; margin-left: -54px; }
+.zz-promo:hover .zzc:nth-child(1) { transform: translateX(-78px) translateY(7px) rotate(-16deg); }
+.zz-promo:hover .zzc:nth-child(2) { transform: translateX(78px) translateY(7px) rotate(16deg); }
+.zz-promo:hover .zzc:nth-child(3) { transform: translateY(-10px); }
+
+.zzc-red {
+  --ink-main: var(--zz-paper); --ink-chars: var(--zz-gold); --ink-label: #f6d47a; --rule: rgba(242,194,48,.75);
+  background:
+    var(--zz-grain),
+    repeating-linear-gradient(97deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse 85% 60% at 50% 38%, rgba(255,120,100,.22), transparent 70%),
+    radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgba(60,0,8,.55)),
+    var(--zz-red);
+  border: 1.5px solid var(--zz-gold-deep);
+  box-shadow: inset 0 1px 0 rgba(255,220,200,.25), 0 3px 10px rgba(90,10,10,.22);
+}
+.zzc-gold {
+  --ink-main: #4a1a0e; --ink-chars: #9b1616; --ink-label: #7a1a12; --rule: rgba(142,27,27,.6);
+  background:
+    var(--zz-grain),
+    repeating-linear-gradient(115deg, rgba(255,255,255,.07) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse 80% 55% at 50% 38%, rgba(255,250,220,.55), transparent 70%),
+    linear-gradient(140deg, #9a7015 0%, #e9c45a 16%, #fbe7a1 30%, #d8a92e 46%, #b0821a 58%, #f3d57c 76%, #a87a14 100%);
+  border: 1.5px solid #7a560c;
+  box-shadow: inset 0 1px 0 rgba(255,250,220,.8), inset 0 -1px 0 rgba(90,60,0,.4), 0 4px 14px rgba(140,95,10,.35);
+}
+.zzc-gold::after {
+  content: ""; position: absolute; inset: -40% -60%; z-index: 2;
+  background: linear-gradient(105deg, transparent 42%, rgba(255,255,240,.55) 50%, transparent 58%);
+  mix-blend-mode: soft-light; transform: translateX(-70%);
+  animation: zz-glint 7s ease-in-out 1.2s infinite; pointer-events: none;
+}
+@keyframes zz-glint { 0% { transform: translateX(-70%); } 22%, 100% { transform: translateX(70%); } }
+
+.zzc-band {
+  display: grid; grid-template-rows: minmax(0, 1fr); min-height: 0;
+  border: 6.4cqw solid transparent;
+  border-image: var(--zz-meander-gold) 12 round;
+}
+.zzc-gold .zzc-band { border-image-source: var(--zz-meander-red); }
+.zzc-plaque {
+  min-height: 0; display: flex; flex-direction: column; align-items: center;
+  border: 1px solid var(--rule); outline: 1px solid var(--rule); outline-offset: -3px;
+  color: var(--ink-main); text-align: center;
+  padding: 4cqw 4cqw 5.5cqw;
+}
+.zzc-gold .zzc-plaque { padding-bottom: 10cqw; }
+.zzc-theme { color: var(--ink-label); font: 600 5.4cqw/1 var(--zz-display); letter-spacing: .14em; text-transform: uppercase; }
+.zzc-chars {
+  display: grid; grid-template-columns: 1fr 1fr; justify-items: center;
+  width: 72%; margin: auto 0;
+  font: 900 23.5cqw/1.12 var(--zz-serif); color: var(--ink-chars);
+  text-shadow: 0 .5cqw 0 rgba(70,0,0,.45);
+}
+.zzc-gold .zzc-chars { text-shadow: 0 .35cqw 0 rgba(255,245,205,.75), 0 -.25cqw 0 rgba(90,50,0,.3); }
+.zzc-gold .zzc-theme, .zzc-gold .zzc-pinyin { text-shadow: 0 .3cqw 0 rgba(255,246,210,.7), 0 -.15cqw 0 rgba(90,50,0,.28); }
+.zzc-pinyin { font: italic 500 8cqw/1.1 var(--zz-display); letter-spacing: .02em; white-space: nowrap; }
+.zzc-source {
+  position: absolute; left: 50%; bottom: 1.6%; z-index: 1;
+  width: max-content; max-width: 56%;
+  padding: 2.6cqw 4.4cqw 2.8cqw; border-radius: 1.4cqw;
+  background: var(--zz-grain), linear-gradient(180deg, #a51d1d, #7e1414);
+  box-shadow: inset 0 0 0 .5px rgba(255,220,140,.85), inset 0 0 0 1cqw #7e1414, inset 0 0 0 1.3cqw rgba(249,220,138,.6), 0 .5cqw 1cqw rgba(80,30,0,.35);
+  color: #f9dc8a; font: 600 6cqw/1 var(--zz-serif);
+  text-shadow: 0 -.25cqw 0 rgba(50,0,0,.55);
+  transform: translateX(-50%); white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zzc, .zzc-gold::after { transition: none; animation: none; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 480px) {
+  .zz-promo { flex-direction: column-reverse; padding: 22px 20px; gap: 14px; text-align: center; }
+  .zz-fan   { width: 220px; height: 165px; }
   header h1 { font-size: 1.9rem; }
   .chinese  { font-size: 1.8rem; }
   .search-card { padding: 18px; }
@@ -651,6 +780,37 @@ textarea::placeholder { color: #bbb; }
     </div>
   </div>
 </div>
+
+<!-- ── zizijuju promo (shown under every tab) ──────────────────────────── -->
+<!-- A plain followed link (no nofollow/sponsored/ugc, no query string) so search engines count it as a backlink. -->
+<aside class="zz-promo">
+  <div class="zz-body">
+    <h2 class="zz-title">
+      <a href="https://zizijuju.app/" target="_blank" rel="noopener">
+        <span class="zz-name" lang="zh">字字句句</span>
+      </a>
+    </h2>
+    <p class="zz-text">Practise <strong>Mandarin pronunciation</strong> with feedback on your <strong>tones</strong>, and collect a new <strong>Chinese idiom</strong> card every day.</p>
+    <span class="zz-cta" aria-hidden="true">Try 字字句句 →</span>
+  </div>
+  <div class="zz-fan" aria-hidden="true">
+    <div class="zzc zzc-red"><div class="zzc-band"><div class="zzc-plaque">
+      <p class="zzc-theme">Nature</p>
+      <p class="zzc-chars"><span>胸</span><span>有</span><span>成</span><span>竹</span></p>
+      <p class="zzc-pinyin">xiōng yǒu chéng zhú</p>
+    </div></div></div>
+    <div class="zzc zzc-red"><div class="zzc-band"><div class="zzc-plaque">
+      <p class="zzc-theme">Numbers</p>
+      <p class="zzc-chars"><span>一</span><span>石</span><span>二</span><span>鸟</span></p>
+      <p class="zzc-pinyin">yī shí èr niǎo</p>
+    </div></div></div>
+    <div class="zzc zzc-gold"><div class="zzc-band"><div class="zzc-plaque">
+      <p class="zzc-theme">Animals</p>
+      <p class="zzc-chars"><span>画</span><span>蛇</span><span>添</span><span>足</span></p>
+      <p class="zzc-pinyin">huà shé tiān zú</p>
+    </div></div><p class="zzc-source">《战国策》</p></div>
+  </div>
+</aside>
 
 <script type="module">
 // Override fetch BEFORE importing transformers.js
